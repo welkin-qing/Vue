@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./lib/vue-2.4.0.js"></script>
+  <link rel="stylesheet" href="./lib/bootstrap-3.3.7.css">
+  <!-- 需要用到Jquery吗？？？ -->
+</head>
+
+<body>
+  <div id="app">
+     
+    
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">添加博客</h3>
+        </div>
+        <div class="panel-body">
+          <div class="panel-body form-inline">
+
+            <label>
+              Blog:
+              <input type="text" class="form-control" v-model="blog">
+            </label>
+
+            <label>
+              Name:
+              <input type="text" class="form-control" v-model="name">
+            </label>
+
+            <input type="button" value="添加" class="btn btn-primary" @click="add">
+
+            <label>
+                搜索博客或作者名称关键字：
+                <input type="text" class="form-control" v-model="keywords" v-focus v-color="'green'">
+              </label>
+
+          </div>
+        </div>
+    </div>
+    
+    
+    <table class="table table-bordered table-hover tabel-striped">
+      <thead>
+        <tr>
+          <th>Blog</th>
+          <th>Name</th>
+          <th>Ctime</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+      <tbody> 
+        <tr v-for="item in search(keywords)" :key="item.blog">
+          <td>{{ item.blog }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.ctime | dateFormat() }}</td>
+          <td>
+            <a href="" @click.prevent="del(item.blog)">删除</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    
+     
+  </div>
+
+  <script>
+
+Vue.filter('dateFormat', function (dateStr, pattern = "") {
+  var dt = new Date(dateStr)
+
+  var y = dt.getFullYear()
+  var m = dt.getMonth() + 1
+  var d = dt.getDate()
+
+
+
+
+  if (pattern.toLowerCase() === 'yyyy-mm-dd') {
+    return `${y}-${m}-${d}`
+  } else {
+    var hh = dt.getHours()
+    var mm = dt.getMinutes()
+    var ss = dt.getSeconds()
+
+    return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+  }
+})
+
+Vue.directive('focus',{
+  inserted: function(el){
+    el.focus()
+  },
+})
+Vue.directive('color',{
+  bind: function(el,binding){
+    el.style.color = binding.value;
+  }
+})
+    // 创建 Vue 实例，得到 ViewModel
+    var vm = new Vue({
+      el :'#app',
+      data :{
+        id: '',
+        blog: '',
+        name: '',
+        keywords: '',
+        list: [
+          {blog:'JS', name:'welkin', ctime: new Date()},
+          {blog:'JQ', name:'wenqing', ctime: new Date()}
+        ]
+      },
+      methods: {
+        add(){
+          var BLOG = { blog: this.blog, name: this.name, ctime: new Date() }
+          this.list.push(BLOG)
+          this.id = this.blog = this.name = ''
+        },
+        del(blog){
+          this.list.some((item, i) => {
+            if (item.blog == blog) {
+              this.list.splice(i, 1)
+              return true;
+            }
+          })
+        },
+        search(keywords){
+          var newList = []
+          this.list.forEach(item => {
+            if (item.name.indexOf(keywords) != -1) {
+              newList.push(item)
+            }
+            else if(item.blog.indexOf(keywords) != -1){
+              newList.push(item)
+            }
+          })
+          return newList
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
