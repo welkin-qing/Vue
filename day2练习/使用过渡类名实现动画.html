@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用过渡类名实现动画</title>
+  <script src="./lib/vue-2.4.0.js"></script>
+  <style>
+     .welkin-enter,
+     .welkin-leave-to {
+         opacity: 0;
+         transform: translateX(150px);
+     }
+     .welkin-enter-active,
+     .welkin-leave-active {
+         transition: all 0.8s ease;
+     }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <input type="button" value="切换" @click="flag=!flag"/>
+
+    <transition name="welkin">
+        <h3 v-if="flag">这是一个h3</h3>
+    </transition>
+  </div>
+
+  <script>
+    // 创建 Vue 实例，得到 ViewModel
+    var vm = new Vue ({
+        el: '#app',
+        data: {
+           flag: false
+        },
+        methods: {
+            
+        }
+    });
+  </script>
+</body>
+
+</html>
