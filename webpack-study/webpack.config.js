@@ -17,6 +17,7 @@ module.exports = {
         rules: [ // 第三方模块的匹配规则
           { test: /\.css$/, use: ['style-loader', 'css-loader'] }, // 处理 CSS 文件的 loader
           { test: /\.js$/, use: 'babel-loader', exclude: /node_modules/ },
+          { test: /\.(ttf|woff2|eot|svg|woff)$/, use: 'url-loader'}
         ]
       }
 }
